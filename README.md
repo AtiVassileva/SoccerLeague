@@ -1,1 +1,2 @@
-# SoccerLeague
+# Soccer League
+- An university project
