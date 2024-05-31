@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SoccerLeague.UI.Data
+namespace SoccerLeague.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SoccerLeague.UI.Data;
+using SoccerLeague.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoccerLeague.UI.Data;
 using System;
+using SoccerLeague.Data;
 
 namespace SoccerLeague.UI.Data.Migrations
 {
