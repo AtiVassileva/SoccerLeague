@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoccerLeague.UI", "SoccerLeague.UI\SoccerLeague.UI.csproj", "{2C2FDC00-5B11-4EB2-BBD4-2232F3EDD679}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4ED6B9F5-8EFB-4126-9679-8FE3A89B678E} = {4ED6B9F5-8EFB-4126-9679-8FE3A89B678E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoccerLeague.Domain", "SoccerLeague.Domain\SoccerLeague.Domain.csproj", "{4ED6B9F5-8EFB-4126-9679-8FE3A89B678E}"
 EndProject

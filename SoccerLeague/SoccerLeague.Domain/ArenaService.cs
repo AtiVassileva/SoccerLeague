@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Data;
@@ -10,51 +11,31 @@ namespace SoccerLeague.Domain
     public class ArenaService : IArenaService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ArenaService(ApplicationDbContext context)
+        public ArenaService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ArenaResponseModel>> GetAll()
         {
-            var arenaResponseModels = await _context.Arenas
-                .Select(a => new ArenaResponseModel
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    Country = a.Country,
-                    HomeTeamId = a.HomeTeamId
-                })
-                .ToListAsync();
-
+            var arenas = await _context.Arenas.ToListAsync();
+            var arenaResponseModels = _mapper.Map<IEnumerable<ArenaResponseModel>>(arenas);
             return arenaResponseModels;
         }
 
         public async Task<ArenaResponseModel> GetById(Guid id)
         {
             var arena = await FindArena(id);
-
-            var arenaResponseModel = new ArenaResponseModel
-            {
-                Name = arena!.Name,
-                Country = arena!.Country,
-                HomeTeamId = arena!.HomeTeamId
-            };
-
+            var arenaResponseModel = _mapper.Map<ArenaResponseModel>(arena);
             return arenaResponseModel;
         }
 
         public async Task<bool> Create(ArenaRequestModel model)
         {
-            var arena = new Arena
-            {
-                Name = model.Name,
-                Country = model.Country,
-                AuthorId = model.AuthorId,
-                HomeTeamId = model.HomeTeamId
-            };
-
+            var arena = _mapper.Map<Arena>(model);
             await _context.Arenas.AddAsync(arena);
             await _context.SaveChangesAsync();
             return true;
