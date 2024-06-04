@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
-using SoccerLeague.Data.Models;
+using SoccerLeague.Models.Data;
 
 namespace SoccerLeague.UI.Controllers
 {

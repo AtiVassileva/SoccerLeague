@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SoccerLeague.Models\SoccerLeague.Models.csproj" />
+  </ItemGroup>
+
 </Project>

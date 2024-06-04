@@ -1,4 +1,4 @@
-﻿namespace SoccerLeague.Data.Models
+﻿namespace SoccerLeague.Models.Data
 {
     public class League : BaseEntity
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SoccerLeague.Data.Models;
+using SoccerLeague.Models.Data;
 
 namespace SoccerLeague.Data
 {

@@ -1,4 +1,4 @@
-﻿@model SoccerLeague.Data.Models.Arena
+﻿@model Arena
 
 @{
     ViewData["Title"] = "Delete";
@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.HomeTeam)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HomeTeam.AuthorId)
+            @Html.DisplayFor(model => model.HomeTeam!.AuthorId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -33,7 +33,7 @@
             @Html.DisplayNameFor(model => model.Author)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author.Id)
+            @Html.DisplayFor(model => model.Author!.Id)
         </dd>
     </dl>
     

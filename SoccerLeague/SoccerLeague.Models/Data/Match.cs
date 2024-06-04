@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SoccerLeague.Data.Models
+namespace SoccerLeague.Models.Data
 {
     public class Match : BaseEntity
     {
