@@ -6,10 +6,10 @@ namespace SoccerLeague.Domain.Contracts
 {
     public interface IArenaService
     {
-        IEnumerable<Arena> GetAll();
-        IEnumerable<ArenaResponseModel> GetById(Guid id);
-        bool Create(ArenaRequestModel model);
-        bool Edit(Guid id, ArenaRequestModel model);
-        bool Delete(Guid id);
+        Task<IEnumerable<ArenaResponseModel>> GetAll();
+        Task<ArenaResponseModel> GetById(Guid id);
+        Task<bool> Create(ArenaRequestModel model);
+        Task<bool> Edit(Guid id, ArenaRequestModel model);
+        Task<bool> Delete(Guid id);
     }
 }

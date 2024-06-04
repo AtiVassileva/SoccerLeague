@@ -14,5 +14,8 @@ namespace SoccerLeague.Models.Request
 
         [Required]
         public Guid HomeTeamId { get; set; }
+
+        [Required] 
+        public string AuthorId { get; set; } = null!;
     }
 }
