@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SoccerLeague.Models\SoccerLeague.Models.csproj" />
+  </ItemGroup>
+
 </Project>
