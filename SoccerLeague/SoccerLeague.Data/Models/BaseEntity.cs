@@ -14,5 +14,10 @@ namespace SoccerLeague.Data.Models
         [Required]
         [StringLength(80, MinimumLength = 3)]
         public string Country { get; set; } = null!;
+
+        [Required] 
+        public string AuthorId { get; set; } = null!;
+
+        public User? Author { get; set; }
     }
 }
