@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SoccerLeague.Data;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
 
@@ -9,12 +8,10 @@ namespace SoccerLeague.UI.Controllers
     {
         private readonly ITeamService _teamService;
         private readonly ILeagueService _leagueService;
-        private readonly ApplicationDbContext _context;
 
-        public TeamsController(ITeamService teamService, ApplicationDbContext context, ILeagueService leagueService)
+        public TeamsController(ITeamService teamService, ILeagueService leagueService)
         {
             _teamService = teamService;
-            _context = context;
             _leagueService = leagueService;
         }
 
