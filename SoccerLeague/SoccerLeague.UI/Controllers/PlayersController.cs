@@ -1,162 +1,120 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SoccerLeague.Data;
-using SoccerLeague.Models.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using SoccerLeague.Domain.Contracts;
+using SoccerLeague.Models.Request;
 
 namespace SoccerLeague.UI.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPlayerService _playerService;
+        private readonly ITeamService _teamService;
 
-        public PlayersController(ApplicationDbContext context)
+        public PlayersController(IPlayerService playerService, ITeamService teamService)
         {
-            _context = context;
+            _playerService = playerService;
+            _teamService = teamService;
         }
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Players.Include(p => p.Author).Include(p => p.Team);
-            return View(await applicationDbContext.ToListAsync());
+            var playerData = await _playerService.GetAll();
+            return View(playerData);
         }
-        
-        public async Task<IActionResult> Details(Guid? id)
+
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null || _context.Players == null)
+            try
             {
-                return NotFound();
+                var player = await _playerService.GetById(id);
+                return View(player);
             }
-
-            var player = await _context.Players
-                .Include(p => p.Author)
-                .Include(p => p.Team)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (player == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
-
-            return View(player);
         }
-        
-        public IActionResult Create()
+
+        public async Task<IActionResult> Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id");
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "AuthorId");
+            var teams = await _teamService.GetAll();
+            ViewBag.Teams = teams
+                .Select(t => new KeyValuePair<Guid, string>(t.Id, t.Name))
+                .ToDictionary(t => t.Key, t => t.Value);
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TeamId,PictureUrl,Id,Name,Country,AuthorId")] Player player)
+        public async Task<IActionResult> Create(PlayerRequestModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                player.Id = Guid.NewGuid();
-                _context.Add(player);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", player.AuthorId);
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "AuthorId", player.TeamId);
-            return View(player);
-        }
-        
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null || _context.Players == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            var player = await _context.Players.FindAsync(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", player.AuthorId);
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "AuthorId", player.TeamId);
-            return View(player);
+            await _playerService.Create(model);
+            return RedirectToAction(nameof(Index));
         }
-        
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                var teams = await _teamService.GetAll();
+                ViewBag.Teams = teams
+                    .Select(t => new KeyValuePair<Guid, string>(t.Id, t.Name))
+                    .ToDictionary(t => t.Key, t => t.Value);
+
+                var player = await _playerService.GetById(id);
+                return View(player);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("TeamId,PictureUrl,Id,Name,Country,AuthorId")] Player player)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, PlayerRequestModel model)
         {
-            if (id != player.Id)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(player);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlayerExists(player.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _playerService.Edit(id, model);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", player.AuthorId);
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "AuthorId", player.TeamId);
-            return View(player);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
-        
-        public async Task<IActionResult> Delete(Guid? id)
+
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null || _context.Players == null)
-            {
-                return NotFound();
-            }
-
-            var player = await _context.Players
-                .Include(p => p.Author)
-                .Include(p => p.Team)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-
+            var player = await _playerService.GetById(id);
             return View(player);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Players == null)
+            try
             {
-                return Problem("Entity set 'ApplicationDbContext.Players'  is null.");
-            }
-            var player = await _context.Players.FindAsync(id);
-            if (player != null)
-            {
-                _context.Players.Remove(player);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                await _playerService.Delete(id);
+                return RedirectToAction(nameof(Index));
 
-        private bool PlayerExists(Guid id)
-        {
-          return (_context.Players?.Any(e => e.Id == id)).GetValueOrDefault();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddTransient<IArenaService, ArenaService>();
 builder.Services.AddTransient<ILeagueService, LeagueService>();
 builder.Services.AddTransient<ITeamService, TeamService>();
+builder.Services.AddTransient<IPlayerService, PlayerService>();
 
 builder.Services.AddControllersWithViews();
 
