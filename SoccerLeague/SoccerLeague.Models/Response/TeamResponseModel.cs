@@ -2,14 +2,11 @@
 
 namespace SoccerLeague.Models.Response
 {
-    public class TeamResponseModel
+    public class TeamResponseModel : BaseResponseModel
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string Country { get; set; } = null!;
-        public string AuthorId { get; set; } = null!;
         public string? LogoUrl { get; set; }
         public int Points { get; set; }
+
         [DisplayName("League")]
         public string? LeagueName { get; set; }
         public Guid LeagueId { get; set; }

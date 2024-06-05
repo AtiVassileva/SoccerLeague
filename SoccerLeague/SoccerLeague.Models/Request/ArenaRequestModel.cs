@@ -2,20 +2,9 @@
 
 namespace SoccerLeague.Models.Request
 {
-    public class ArenaRequestModel
+    public class ArenaRequestModel : BaseRequestModel
     {
         [Required]
-        [StringLength(150, MinimumLength = 3)]
-        public string Name { get; set; } = null!;
-
-        [Required]
-        [StringLength(80, MinimumLength = 3)]
-        public string Country { get; set; } = null!;
-
-        [Required]
         public Guid HomeTeamId { get; set; }
-
-        [Required] 
-        public string AuthorId { get; set; } = null!;
     }
 }
