@@ -6,7 +6,7 @@ namespace SoccerLeague.Models.Data
     {
         [Required]
         public Guid TeamId { get; set; }
-        public Team Team { get; set; } = null!;
+        public virtual Team Team { get; set; } = null!;
         public string? PictureUrl { get; set; }
     }
 }

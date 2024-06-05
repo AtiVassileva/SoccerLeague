@@ -56,7 +56,7 @@ namespace SoccerLeague.UI.Controllers
             ModelState.Clear();
             model.AuthorId = User.GetId();
             TryValidateModel(model);
-            //ModelState.SetModelValue("AuthorId", new ValueProviderResult(User.GetId()));
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();

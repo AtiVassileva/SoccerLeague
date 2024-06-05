@@ -23,7 +23,6 @@ namespace SoccerLeague.Domain
         {
             var arenas = await _context.Arenas
                 .Include(a => a.HomeTeam)
-                .Include(a => a.Author)
                 .ToListAsync();
 
             var arenaResponseModels = _mapper.Map<IEnumerable<ArenaResponseModel>>(arenas);
@@ -52,7 +51,7 @@ namespace SoccerLeague.Domain
             arena!.Name = model.Name;
             arena!.Country = model.Country;
             arena!.HomeTeamId = model.HomeTeamId;
-            
+
             await _context.SaveChangesAsync();
             return true;
         }
@@ -68,8 +67,7 @@ namespace SoccerLeague.Domain
         private async Task<Arena?> FindArena(Guid id)
         {
             var arena = await _context.Arenas
-                .Include(a => a.Author)
-                .Include(a => a.HomeTeam)
+                    .Include(a => a.HomeTeam)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (arena == null)
