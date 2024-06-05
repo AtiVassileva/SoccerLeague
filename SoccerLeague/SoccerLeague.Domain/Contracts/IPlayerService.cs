@@ -5,10 +5,10 @@ namespace SoccerLeague.Domain.Contracts
 {
     public interface IPlayerService
     {
-        Task<IEnumerable<TeamResponseModel>> GetAll();
-        Task<TeamResponseModel> GetById(Guid id);
-        Task<bool> Create(TeamRequestModel model);
-        Task<bool> Edit(Guid id, TeamRequestModel model);
+        Task<IEnumerable<PlayerResponseModel>> GetAll();
+        Task<PlayerResponseModel> GetById(Guid id);
+        Task<bool> Create(PlayerRequestModel model);
+        Task<bool> Edit(Guid id, PlayerRequestModel model);
         Task<bool> Delete(Guid id);
     }
 }
