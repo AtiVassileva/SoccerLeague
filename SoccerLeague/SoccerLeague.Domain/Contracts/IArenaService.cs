@@ -1,5 +1,4 @@
-﻿using SoccerLeague.Models.Data;
-using SoccerLeague.Models.Request;
+﻿using SoccerLeague.Models.Request;
 using SoccerLeague.Models.Response;
 
 namespace SoccerLeague.Domain.Contracts
