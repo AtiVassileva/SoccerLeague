@@ -1,23 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SoccerLeague.Data;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
-using SoccerLeague.UI.Infrastructure;
 
 namespace SoccerLeague.UI.Controllers
 {
     public class ArenasController : Controller
     {
         private readonly IArenaService _arenaService;
-        private readonly ApplicationDbContext _context;
+        private readonly ITeamService _teamService;
 
-        public ArenasController(IArenaService arenaService, ApplicationDbContext context)
+        public ArenasController(IArenaService arenaService, ITeamService teamService)
         {
             _arenaService = arenaService;
-            _context = context;
+            _teamService = teamService;
         }
 
         [HttpGet]
@@ -42,10 +37,10 @@ namespace SoccerLeague.UI.Controllers
         
         public async Task<IActionResult> Create()
         {
-            ViewBag.Teams = await _context
-                .Teams
+            var teams = await _teamService.GetAll();
+            ViewBag.Teams = teams
                 .Select(t => new KeyValuePair<Guid,string>(t.Id, t.Name))
-                .ToDictionaryAsync(t => t.Key, t => t.Value);
+                .ToDictionary(t => t.Key, t => t.Value);
             return View();
         }
 

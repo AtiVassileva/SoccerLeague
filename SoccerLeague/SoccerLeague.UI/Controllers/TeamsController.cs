@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
