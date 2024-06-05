@@ -18,6 +18,6 @@ namespace SoccerLeague.Models.Data
         [Required] 
         public string AuthorId { get; set; } = null!;
 
-        public User? Author { get; set; }
+        public User Author { get; set; } = null!;
     }
 }

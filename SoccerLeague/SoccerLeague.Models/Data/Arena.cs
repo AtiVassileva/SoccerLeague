@@ -7,6 +7,6 @@ namespace SoccerLeague.Models.Data
         [Required]
         public Guid HomeTeamId { get; set; }
 
-        public Team? HomeTeam { get; set; }
+        public Team HomeTeam { get; set; } = null!;
     }
 }

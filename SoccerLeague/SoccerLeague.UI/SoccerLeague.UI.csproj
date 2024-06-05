@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SoccerLeague.Data\SoccerLeague.Data.csproj" />
+    <ProjectReference Include="..\SoccerLeague.Domain\SoccerLeague.Domain.csproj" />
   </ItemGroup>
 
 </Project>

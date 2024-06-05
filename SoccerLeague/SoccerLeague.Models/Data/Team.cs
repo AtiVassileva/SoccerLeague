@@ -7,7 +7,7 @@ namespace SoccerLeague.Models.Data
         [Required]
         public Guid LeagueId { get; set; }
 
-        public League? League { get; set; }
+        public League League { get; set; } = null!;
 
         public int Points { get; set; }
 

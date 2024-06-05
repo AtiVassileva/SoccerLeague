@@ -1,135 +1,107 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
-using SoccerLeague.Models.Data;
+using SoccerLeague.Domain.Contracts;
+using SoccerLeague.Models.Request;
+using SoccerLeague.UI.Infrastructure;
 
 namespace SoccerLeague.UI.Controllers
 {
     public class ArenasController : Controller
     {
+        private readonly IArenaService _arenaService;
         private readonly ApplicationDbContext _context;
 
-        public ArenasController(ApplicationDbContext context)
+        public ArenasController(IArenaService arenaService, ApplicationDbContext context)
         {
+            _arenaService = arenaService;
             _context = context;
         }
-        
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Arenas.Include(a => a.Author).Include(a => a.HomeTeam);
-            return View(await applicationDbContext.ToListAsync());
+            var arenaData = await _arenaService.GetAll();
+            return View(arenaData);
         }
         
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null || _context.Arenas == null)
+            try
             {
-                return NotFound();
+                var arena = await _arenaService.GetById(id);
+                return View(arena);
             }
-
-            var arena = await _context.Arenas
-                .Include(a => a.Author)
-                .Include(a => a.HomeTeam)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (arena == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
-
-            return View(arena);
         }
         
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id");
-            ViewData["HomeTeamId"] = new SelectList(_context.Teams, "Id", "AuthorId");
+            ViewBag.Teams = await _context
+                .Teams
+                .Select(t => new KeyValuePair<Guid,string>(t.Id, t.Name))
+                .ToDictionaryAsync(t => t.Key, t => t.Value);
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HomeTeamId,Id,Name,Country,AuthorId")] Arena arena)
+        public async Task<IActionResult> Create(ArenaRequestModel model)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            model.AuthorId = User.GetId();
+            TryValidateModel(model);
+            //ModelState.SetModelValue("AuthorId", new ValueProviderResult(User.GetId()));
+            if (!ModelState.IsValid)
             {
-                arena.Id = Guid.NewGuid();
-                _context.Add(arena);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return BadRequest();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", arena.AuthorId);
-            ViewData["HomeTeamId"] = new SelectList(_context.Teams, "Id", "AuthorId", arena.HomeTeamId);
-            return View(arena);
+
+            await _arenaService.Create(model);
+            return View(nameof(Index));
         }
 
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null || _context.Arenas == null)
+            try
             {
-                return NotFound();
+                var arena = await _arenaService.GetById(id);
+                return View(arena);
             }
-
-            var arena = await _context.Arenas.FindAsync(id);
-            if (arena == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", arena.AuthorId);
-            ViewData["HomeTeamId"] = new SelectList(_context.Teams, "Id", "AuthorId", arena.HomeTeamId);
-            return View(arena);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("HomeTeamId,Id,Name,Country,AuthorId")] Arena arena)
+        public async Task<IActionResult> Edit(Guid id, ArenaRequestModel model)
         {
-            if (id != arena.Id)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(arena);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArenaExists(arena.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _arenaService.Edit(id, model);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", arena.AuthorId);
-            ViewData["HomeTeamId"] = new SelectList(_context.Teams, "Id", "AuthorId", arena.HomeTeamId);
-            return View(arena);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
         
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null || _context.Arenas == null)
-            {
-                return NotFound();
-            }
-
-            var arena = await _context.Arenas
-                .Include(a => a.Author)
-                .Include(a => a.HomeTeam)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (arena == null)
-            {
-                return NotFound();
-            }
-
+            var arena = await _arenaService.GetById(id);
             return View(arena);
         }
         
@@ -137,23 +109,16 @@ namespace SoccerLeague.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Arenas == null)
+            try
             {
-                return Problem("Entity set 'ApplicationDbContext.Arenas'  is null.");
-            }
-            var arena = await _context.Arenas.FindAsync(id);
-            if (arena != null)
-            {
-                _context.Arenas.Remove(arena);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                await _arenaService.Delete(id);
+                return RedirectToAction(nameof(Index));
 
-        private bool ArenaExists(Guid id)
-        {
-          return (_context.Arenas?.Any(e => e.Id == id)).GetValueOrDefault();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

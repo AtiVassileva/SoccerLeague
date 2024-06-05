@@ -21,7 +21,11 @@ namespace SoccerLeague.Domain
 
         public async Task<IEnumerable<ArenaResponseModel>> GetAll()
         {
-            var arenas = await _context.Arenas.ToListAsync();
+            var arenas = await _context.Arenas
+                .Include(a => a.HomeTeam)
+                .Include(a => a.Author)
+                .ToListAsync();
+
             var arenaResponseModels = _mapper.Map<IEnumerable<ArenaResponseModel>>(arenas);
             return arenaResponseModels;
         }
@@ -63,7 +67,10 @@ namespace SoccerLeague.Domain
 
         private async Task<Arena?> FindArena(Guid id)
         {
-            var arena = await _context.Arenas.FirstOrDefaultAsync(a => a.Id == id);
+            var arena = await _context.Arenas
+                .Include(a => a.Author)
+                .Include(a => a.HomeTeam)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
             if (arena == null)
             {
