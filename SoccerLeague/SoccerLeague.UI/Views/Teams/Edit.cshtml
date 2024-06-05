@@ -1,4 +1,4 @@
-﻿@model Team
+﻿@model TeamResponseModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,10 +12,9 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group visually-hidden">
                 <label asp-for="LeagueId" class="control-label"></label>
-                <select asp-for="LeagueId" class="form-control" asp-items="ViewBag.LeagueId"></select>
-                <span asp-validation-for="LeagueId" class="text-danger"></span>
+                <input asp-for="LeagueId" value="@Model.LeagueId" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Points" class="control-label"></label>
@@ -27,7 +26,6 @@
                 <input asp-for="LogoUrl" class="form-control" />
                 <span asp-validation-for="LogoUrl" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -38,10 +36,9 @@
                 <input asp-for="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group visually-hidden">
                 <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
-                <span asp-validation-for="AuthorId" class="text-danger"></span>
+                <input asp-for="AuthorId" value="@Model.AuthorId" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

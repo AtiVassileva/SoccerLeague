@@ -1,4 +1,4 @@
-﻿@model Team
+﻿@model TeamResponseModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,10 +11,10 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.League)
+            @Html.DisplayNameFor(model => model.LeagueName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.League.AuthorId)
+            @Html.DisplayFor(model => model.LeagueName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Points)
@@ -39,12 +39,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author.Id)
         </dd>
     </dl>
 </div>

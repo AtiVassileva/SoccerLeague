@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Team>
+﻿@model IEnumerable<TeamResponseModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.League)
+                @Html.DisplayNameFor(model => model.LeagueId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Points)
@@ -27,9 +27,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Country)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -37,7 +34,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.League.AuthorId)
+                @Html.DisplayFor(modelItem => item.LeagueId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Points)
@@ -50,9 +47,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
