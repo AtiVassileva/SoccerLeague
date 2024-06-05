@@ -53,17 +53,13 @@ namespace SoccerLeague.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ArenaRequestModel model)
         {
-            ModelState.Clear();
-            model.AuthorId = User.GetId();
-            TryValidateModel(model);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
             await _arenaService.Create(model);
-            return View(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -81,7 +77,7 @@ namespace SoccerLeague.UI.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, ArenaRequestModel model)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, ArenaRequestModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -10,5 +10,6 @@ namespace SoccerLeague.Models.Response
         public Guid HomeTeamId { get; set; }
         [DisplayName("Home Team")]
         public string? HomeTeamName { get; set; }
+        public string AuthorId { get; set; } = null!;
     }
 }

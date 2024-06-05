@@ -1,4 +1,5 @@
-﻿@model Arena
+﻿@using SoccerLeague.UI.Infrastructure
+@model Arena
 
 @{
     ViewData["Title"] = "Create Arena";
@@ -30,6 +31,10 @@
                 <label asp-for="Country" class="control-label"></label>
                 <input asp-for="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group visually-hidden">
+                <label asp-for="AuthorId" class="control-label"></label>
+                <input asp-for="AuthorId" value="@User.GetId()"class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

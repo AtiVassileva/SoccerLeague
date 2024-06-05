@@ -23,6 +23,13 @@
                 <input asp-for="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
+            <div class="form-group visually-hidden">
+                <label asp-for="AuthorId" class="control-label"></label>
+                <input asp-for="AuthorId" value="@Model.AuthorId"class="form-control" />
+            </div><div class="form-group visually-hidden">
+                <label asp-for="HomeTeamId" class="control-label"></label>
+                <input asp-for="HomeTeamId" value="@Model.HomeTeamId"class="form-control" />
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

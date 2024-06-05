@@ -1,153 +1,117 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
-using SoccerLeague.Models.Data;
+using SoccerLeague.Domain.Contracts;
+using SoccerLeague.Models.Request;
 
 namespace SoccerLeague.UI.Controllers
 {
     public class LeaguesController : Controller
     {
+        private readonly ILeagueService _leagueService;
         private readonly ApplicationDbContext _context;
 
-        public LeaguesController(ApplicationDbContext context)
+        public LeaguesController(ILeagueService leagueService, ApplicationDbContext context)
         {
+            _leagueService = leagueService;
             _context = context;
         }
-        
+
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Leagues.Include(l => l.Author);
-            return View(await applicationDbContext.ToListAsync());
+            var leagueData = await _leagueService.GetAll();
+            return View(leagueData);
         }
-        
-        public async Task<IActionResult> Details(Guid? id)
+
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null || _context.Leagues == null)
+            try
             {
-                return NotFound();
+                var league = await _leagueService.GetById(id);
+                return View(league);
             }
-
-            var league = await _context.Leagues
-                .Include(l => l.Author)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (league == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
-
-            return View(league);
         }
-        
-        public IActionResult Create()
+
+        public async Task<IActionResult> Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id");
+            ViewBag.Teams = await _context
+                .Teams
+                .Select(t => new KeyValuePair<Guid, string>(t.Id, t.Name))
+                .ToDictionaryAsync(t => t.Key, t => t.Value);
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LogoUrl,Id,Name,Country,AuthorId")] League league)
+        public async Task<IActionResult> Create(LeagueRequestModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                league.Id = Guid.NewGuid();
-                _context.Add(league);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", league.AuthorId);
-            return View(league);
-        }
-        
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            if (id == null || _context.Leagues == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            var league = await _context.Leagues.FindAsync(id);
-            if (league == null)
-            {
-                return NotFound();
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", league.AuthorId);
-            return View(league);
+            await _leagueService.Create(model);
+            return RedirectToAction(nameof(Index));
         }
-        
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                var league = await _leagueService.GetById(id);
+                return View(league);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("LogoUrl,Id,Name,Country,AuthorId")] League league)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, LeagueRequestModel model)
         {
-            if (id != league.Id)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(league);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LeagueExists(league.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _leagueService.Edit(id, model);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<User>(), "Id", "Id", league.AuthorId);
-            return View(league);
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
-        
-        public async Task<IActionResult> Delete(Guid? id)
+
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null || _context.Leagues == null)
-            {
-                return NotFound();
-            }
-
-            var league = await _context.Leagues
-                .Include(l => l.Author)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (league == null)
-            {
-                return NotFound();
-            }
-
+            var league = await _leagueService.GetById(id);
             return View(league);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Leagues == null)
+            try
             {
-                return Problem("Entity set 'ApplicationDbContext.Leagues'  is null.");
-            }
-            var league = await _context.Leagues.FindAsync(id);
-            if (league != null)
-            {
-                _context.Leagues.Remove(league);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                await _leagueService.Delete(id);
+                return RedirectToAction(nameof(Index));
 
-        private bool LeagueExists(Guid id)
-        {
-          return (_context.Leagues?.Any(e => e.Id == id)).GetValueOrDefault();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

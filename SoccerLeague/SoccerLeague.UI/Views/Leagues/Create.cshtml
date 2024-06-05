@@ -1,4 +1,5 @@
-﻿@model League
+﻿@using SoccerLeague.UI.Infrastructure
+@model LeagueRequestModel
 
 @{
     ViewData["Title"] = "Create";
@@ -27,9 +28,9 @@
                 <input asp-for="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group visually-hidden">
                 <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class ="form-control" asp-items="ViewBag.AuthorId"></select>
+                <input asp-for="AuthorId" value="@User.GetId()"class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

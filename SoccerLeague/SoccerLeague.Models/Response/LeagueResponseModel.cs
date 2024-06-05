@@ -6,5 +6,6 @@
         public string Name { get; set; } = null!;
         public string Country { get; set; } = null!;
         public string? LogoUrl { get; set; }
+        public string AuthorId { get; set; } = null!;
     }
 }
