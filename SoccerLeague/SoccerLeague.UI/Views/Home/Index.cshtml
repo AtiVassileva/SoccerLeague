@@ -1,8 +1,17 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome!</h1>
+    @if(!SignInManager.IsSignedIn(User))
+    {
+        <p>
+            Please, <a asp-area="Identity" asp-page="/Account/Register">Register</a> or <a asp-area="Identity" asp-page="/Account/Login">Login</a> to proceed.
+        </p>
+    }
+    <img width="500" height="300" src="https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?cs=srgb&dl=pexels-pixabay-46798.jpg&fm=jpg" alt="Football Ball"/>
 </div>

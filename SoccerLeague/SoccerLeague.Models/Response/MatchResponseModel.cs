@@ -31,8 +31,10 @@ namespace SoccerLeague.Models.Response
         [DisplayName("Match Date")]
         public DateTime PlayedOn { get; set; }
 
+        [DisplayName("Host Goals")]
         public int HostGoals { get; set; }
-
+        
+        [DisplayName("Guest Goals")]
         public int GuestGoals { get; set; }
     }
 }
