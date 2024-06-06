@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
 using SoccerLeague.Domain.Contracts;
@@ -6,6 +7,7 @@ using SoccerLeague.Models.Request;
 
 namespace SoccerLeague.UI.Controllers
 {
+    [Authorize]
     public class LeaguesController : Controller
     {
         private readonly ILeagueService _leagueService;

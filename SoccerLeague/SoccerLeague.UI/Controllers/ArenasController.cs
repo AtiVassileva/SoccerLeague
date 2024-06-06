@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
 
 namespace SoccerLeague.UI.Controllers
 {
+    [Authorize]
     public class ArenasController : Controller
     {
         private readonly IArenaService _arenaService;
