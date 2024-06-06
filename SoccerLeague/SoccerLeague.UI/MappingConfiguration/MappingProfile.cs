@@ -32,6 +32,12 @@ namespace SoccerLeague.UI.MappingConfiguration
 
             CreateMap<Player, PlayerResponseModel>()
                 .ReverseMap();
+
+            CreateMap<Match, MatchRequestModel>()
+                .ReverseMap();
+
+            CreateMap<Match, MatchResponseModel>()
+                .ReverseMap();
         }
     }
 }

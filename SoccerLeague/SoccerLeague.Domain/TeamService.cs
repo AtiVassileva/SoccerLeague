@@ -51,6 +51,7 @@ namespace SoccerLeague.Domain
             team!.Name = model.Name;
             team!.Country = model.Country;
             team!.LogoUrl = model.LogoUrl;
+            team!.Points = model.Points;
 
             await _context.SaveChangesAsync();
             return true;
