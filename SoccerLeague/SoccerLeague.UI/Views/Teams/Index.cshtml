@@ -6,60 +6,60 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Soccer Teams</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.LeagueId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Points)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LogoUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LogoUrl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LeagueId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Points)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeagueId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Points)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LogoUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                
-                @if (item.AuthorId == User.GetId())
-                {
-                    <a asp-action="Edit" asp-route-id="@item?.Id">Edit</a> 
-                    <a asp-action="Delete" asp-route-id="@item?.Id">Delete</a>
-                }
-            </td>
-        </tr>
+    <tr>
+        <td>
+            <img src="@item.LogoUrl" width="250" height="200" alt=""/>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LeagueName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Points)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+            @if (item.AuthorId == User.GetId())
+            {
+                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item?.Id">Edit</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item?.Id">Delete</a>
+            }
+        </td>
+    </tr>
 }
     </tbody>
 </table>
