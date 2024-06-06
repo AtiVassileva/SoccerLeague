@@ -1,4 +1,4 @@
-﻿@model Match
+﻿@model MatchResponseModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,23 +14,39 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LeagueId" class="control-label"></label>
-                <select asp-for="LeagueId" class="form-control" asp-items="ViewBag.LeagueId"></select>
-                <span asp-validation-for="LeagueId" class="text-danger"></span>
+                <select asp-for="LeagueId" class="form-control">
+                    @foreach (var kvp in ViewBag.Leagues)
+                    {
+                        <option value="@kvp.Key">@kvp.Value</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="HostId" class="control-label"></label>
-                <select asp-for="HostId" class="form-control" asp-items="ViewBag.HostId"></select>
-                <span asp-validation-for="HostId" class="text-danger"></span>
+                <select asp-for="HostId" class="form-control">
+                    @foreach (var kvp in ViewBag.Teams)
+                    {
+                        <option value="@kvp.Key">@kvp.Value</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="GuestId" class="control-label"></label>
-                <select asp-for="GuestId" class="form-control" asp-items="ViewBag.GuestId"></select>
-                <span asp-validation-for="GuestId" class="text-danger"></span>
+                <select asp-for="GuestId" class="form-control">
+                    @foreach (var kvp in ViewBag.Teams)
+                    {
+                        <option value="@kvp.Key">@kvp.Value</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="ArenaId" class="control-label"></label>
-                <select asp-for="ArenaId" class="form-control" asp-items="ViewBag.ArenaId"></select>
-                <span asp-validation-for="ArenaId" class="text-danger"></span>
+                <select asp-for="ArenaId" class="form-control">
+                    @foreach (var kvp in ViewBag.Arenas)
+                    {
+                        <option value="@kvp.Key">@kvp.Value</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="PlayedOn" class="control-label"></label>
@@ -47,7 +63,6 @@
                 <input asp-for="GuestGoals" class="form-control" />
                 <span asp-validation-for="GuestGoals" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -58,10 +73,9 @@
                 <input asp-for="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group visually-hidden">
                 <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
-                <span asp-validation-for="AuthorId" class="text-danger"></span>
+                <input asp-for="AuthorId" class ="form-control" value="@Model.AuthorId"/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

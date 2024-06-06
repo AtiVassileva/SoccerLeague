@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
+using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Data;
 using SoccerLeague.Models.Request;
 using SoccerLeague.Models.Response;
 
 namespace SoccerLeague.Domain
 {
-    public class MatchService
+    public class MatchService : IMatchService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;

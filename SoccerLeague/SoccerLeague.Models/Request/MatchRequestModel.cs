@@ -25,9 +25,11 @@ namespace SoccerLeague.Models.Request
         public DateTime PlayedOn { get; set; }
 
         [Range(0, int.MaxValue)]
+        [DisplayName("Host Goals")]
         public int HostGoals { get; set; }
 
         [Range(0, int.MaxValue)]
+        [DisplayName("Guest Goals")]
         public int GuestGoals { get; set; }
     }
 }

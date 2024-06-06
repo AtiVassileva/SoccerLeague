@@ -17,16 +17,16 @@ namespace SoccerLeague.Models.Response
         public Guid ArenaId { get; set; }
 
         [DisplayName("Host")]
-        public string? HostTeamName { get; set; }
+        public string? HostName { get; set; }
 
         [DisplayName("Host")] 
-        public Guid HostTeamId { get; set; }
+        public Guid HostId { get; set; }
 
         [DisplayName("Guest")]
-        public string? GuestTeamName { get; set; }
+        public string? GuestName { get; set; }
 
         [DisplayName("Guest")]
-        public Guid GuestTeamId { get; set; }
+        public Guid GuestId { get; set; }
 
         [DisplayName("Match Date")]
         public DateTime PlayedOn { get; set; }
