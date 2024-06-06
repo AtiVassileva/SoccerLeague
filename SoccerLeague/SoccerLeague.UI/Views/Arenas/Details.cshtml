@@ -1,4 +1,5 @@
-﻿@model ArenaResponseModel
+﻿@using SoccerLeague.UI.Infrastructure
+@model ArenaResponseModel
 
 @{
     ViewData["Title"] = "Details";
@@ -25,6 +26,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (Model.AuthorId == User.GetId())
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> 
+    }
+    | <a asp-action="Index">Back to List</a>
 </div>

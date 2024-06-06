@@ -1,4 +1,6 @@
-﻿@model MatchResponseModel
+﻿@using SoccerLeague.UI.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MatchResponseModel
 
 @{
     ViewData["Title"] = "Details";
@@ -67,6 +69,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @if (Model.AuthorId == User.GetId())
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> 
+    }
     <a asp-action="Index">Back to List</a>
 </div>
