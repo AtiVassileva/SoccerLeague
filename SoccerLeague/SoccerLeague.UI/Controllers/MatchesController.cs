@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
+using SoccerLeague.UI.Infrastructure;
 
 namespace SoccerLeague.UI.Controllers
 {
@@ -65,6 +66,12 @@ namespace SoccerLeague.UI.Controllers
             try
             {
                 var match = await _matchService.GetById(id);
+
+                if (match.AuthorId != User.GetId())
+                {
+                    return Unauthorized();
+                }
+
                 await GetSelectDropdownsData();
                 return View(match);
             }
@@ -78,6 +85,11 @@ namespace SoccerLeague.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] Guid id, MatchRequestModel model)
         {
+            if (model.AuthorId != User.GetId())
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -97,6 +109,12 @@ namespace SoccerLeague.UI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var match = await _matchService.GetById(id);
+
+            if (match.AuthorId != User.GetId())
+            {
+                return Unauthorized();
+            }
+
             return View(match);
         }
 

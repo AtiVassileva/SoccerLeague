@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
+using SoccerLeague.UI.Infrastructure;
 
 namespace SoccerLeague.UI.Controllers
 {
@@ -63,12 +64,18 @@ namespace SoccerLeague.UI.Controllers
         {
             try
             {
+                var player = await _playerService.GetById(id);
+
+                if (player.AuthorId != User.GetId())
+                {
+                    return Unauthorized();
+                }
+
                 var teams = await _teamService.GetAll();
                 ViewBag.Teams = teams
                     .Select(t => new KeyValuePair<Guid, string>(t.Id, t.Name))
                     .ToDictionary(t => t.Key, t => t.Value);
 
-                var player = await _playerService.GetById(id);
                 return View(player);
             }
             catch (Exception e)
@@ -81,6 +88,11 @@ namespace SoccerLeague.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] Guid id, PlayerRequestModel model)
         {
+            if (model.AuthorId != User.GetId())
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -100,6 +112,12 @@ namespace SoccerLeague.UI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var player = await _playerService.GetById(id);
+
+            if (player.AuthorId != User.GetId())
+            {
+                return Unauthorized();
+            }
+
             return View(player);
         }
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SoccerLeague.Data;
 using SoccerLeague.Domain.Contracts;
 using SoccerLeague.Models.Request;
+using SoccerLeague.UI.Infrastructure;
 
 namespace SoccerLeague.UI.Controllers
 {
@@ -66,6 +67,12 @@ namespace SoccerLeague.UI.Controllers
             try
             {
                 var league = await _leagueService.GetById(id);
+
+                if (league.AuthorId != User.GetId())
+                {
+                    return Unauthorized();
+                }
+
                 return View(league);
             }
             catch (Exception e)
@@ -78,6 +85,11 @@ namespace SoccerLeague.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] Guid id, LeagueRequestModel model)
         {
+            if (model.AuthorId != User.GetId())
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -97,6 +109,12 @@ namespace SoccerLeague.UI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var league = await _leagueService.GetById(id);
+
+            if (league.AuthorId != User.GetId())
+            {
+                return Unauthorized();
+            }
+
             return View(league);
         }
 
