@@ -6,10 +6,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Football Arenas</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -39,11 +39,11 @@
                 @Html.DisplayFor(modelItem => item.HomeTeamName)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 @if (item.AuthorId == User.GetId())
                 {
-                    <a asp-action="Edit" asp-route-id="@item?.Id">Edit</a> 
-                    <a asp-action="Delete" asp-route-id="@item?.Id">Delete</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item?.Id">Edit</a> 
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item?.Id">Delete</a>
                 }
                 
             </td>
