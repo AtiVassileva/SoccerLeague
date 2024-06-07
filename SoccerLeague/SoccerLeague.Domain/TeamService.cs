@@ -22,6 +22,7 @@ namespace SoccerLeague.Domain
         public async Task<IEnumerable<TeamResponseModel>> GetAll()
         {
             var teams = await _context.Teams
+                .OrderByDescending(t => t.Points)
                 .Include(t => t.League)
                 .ToListAsync();
 

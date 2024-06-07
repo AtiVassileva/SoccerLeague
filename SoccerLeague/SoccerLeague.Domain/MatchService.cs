@@ -22,6 +22,7 @@ namespace SoccerLeague.Domain
         public async Task<IEnumerable<MatchResponseModel>> GetAll()
         {
             var matches = await _context.Matches
+                .OrderByDescending(m => m.PlayedOn)
                 .Include(m => m.Arena)
                 .Include(m => m.League)
                 .Include(m => m.Host)

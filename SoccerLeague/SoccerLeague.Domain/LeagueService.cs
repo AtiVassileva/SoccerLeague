@@ -22,6 +22,7 @@ namespace SoccerLeague.Domain
         public async Task<IEnumerable<LeagueResponseModel>> GetAll()
         {
             var leagues = await _context.Leagues
+                .OrderBy(a => a.Name)
                 .ToListAsync();
 
             var leagueResponseModels = _mapper.Map<IEnumerable<LeagueResponseModel>>(leagues);
